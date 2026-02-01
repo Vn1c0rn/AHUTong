@@ -22,6 +22,8 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.navArgument
+import androidx.navigation.NavType
 import com.ahu.ahutong.appwidget.ScheduleAppWidgetReceiver
 import com.ahu.ahutong.ui.screen.main.BathroomDeposit
 import com.ahu.ahutong.ui.screen.main.CardBalanceDeposit
@@ -36,10 +38,16 @@ import com.ahu.ahutong.ui.screen.settings.Contributors
 import com.ahu.ahutong.ui.screen.settings.Debug
 import com.ahu.ahutong.ui.screen.settings.License
 import com.ahu.ahutong.ui.screen.settings.Preferences
+import com.ahu.ahutong.ui.screen.canteen.CanteenCampusScreen
+import com.ahu.ahutong.ui.screen.canteen.CanteenDetailScreen
+import com.ahu.ahutong.ui.screen.canteen.CanteenListScreen
+import com.ahu.ahutong.ui.screen.canteen.CanteenRoutes
+import com.ahu.ahutong.ui.screen.canteen.CanteenWindowDetailScreen
 import com.ahu.ahutong.ui.screen.setup.Info
 import com.ahu.ahutong.ui.screen.setup.Login
 import com.ahu.ahutong.ui.shape.SmoothRoundedCornerShape
 import com.ahu.ahutong.ui.state.AboutViewModel
+import com.ahu.ahutong.ui.state.CanteenViewModel
 import com.ahu.ahutong.ui.state.DiscoveryViewModel
 import com.ahu.ahutong.ui.state.LoginViewModel
 import com.ahu.ahutong.ui.state.MainViewModel
@@ -67,6 +75,7 @@ fun Main(
 ) {
     Box {
         val backdrop = rememberLayerBackdrop()
+        val canteenViewModel: CanteenViewModel = viewModel()
         NavHost(
             navController = navController,
             startDestination = "splash",
@@ -168,6 +177,49 @@ fun Main(
 
             animatedComposable("debug") {
                 Debug()
+            }
+
+            animatedComposable(CanteenRoutes.Campus) {
+                CanteenCampusScreen(
+                    navController = navController,
+                    canteenViewModel = canteenViewModel
+                )
+            }
+
+            animatedComposable(
+                CanteenRoutes.CanteenListRoute,
+                arguments = listOf(navArgument(CanteenRoutes.CampusArg) { type = NavType.StringType })
+            ) { entry ->
+                val campusId = entry.arguments?.getString(CanteenRoutes.CampusArg) ?: return@animatedComposable
+                CanteenListScreen(
+                    campusId = campusId,
+                    navController = navController,
+                    canteenViewModel = canteenViewModel
+                )
+            }
+
+            animatedComposable(
+                CanteenRoutes.CanteenDetailRoute,
+                arguments = listOf(navArgument(CanteenRoutes.CanteenArg) { type = NavType.StringType })
+            ) { entry ->
+                val canteenId = entry.arguments?.getString(CanteenRoutes.CanteenArg) ?: return@animatedComposable
+                CanteenDetailScreen(
+                    canteenId = canteenId,
+                    navController = navController,
+                    canteenViewModel = canteenViewModel
+                )
+            }
+
+            animatedComposable(
+                CanteenRoutes.WindowDetailRoute,
+                arguments = listOf(navArgument(CanteenRoutes.WindowArg) { type = NavType.StringType })
+            ) { entry ->
+                val windowId = entry.arguments?.getString(CanteenRoutes.WindowArg) ?: return@animatedComposable
+                CanteenWindowDetailScreen(
+                    windowId = windowId,
+                    navController = navController,
+                    canteenViewModel = canteenViewModel
+                )
             }
 
             animatedComposable("splash") {

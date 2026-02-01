@@ -25,6 +25,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.ahu.ahutong.ui.components.LiquidBottomTab
 import com.ahu.ahutong.ui.components.LiquidBottomTabs
+import com.ahu.ahutong.ui.screen.canteen.CanteenRoutes
 import com.kyant.backdrop.Backdrop
 
 @Composable
@@ -38,7 +39,9 @@ fun BoxScope.BottomNavBar(
         when (currentRoute) {
             "home", "electricity_pay", "card_balance_deposit", "bathroom_deposit" -> 0
             "schedule", "info" -> 1
-            "tools", "grade", "phone_book", "exam" -> 2
+            "tools", "grade", "phone_book", "exam",
+            CanteenRoutes.Campus, CanteenRoutes.CanteenListRoute,
+            CanteenRoutes.CanteenDetailRoute, CanteenRoutes.WindowDetailRoute -> 2
             "settings", "settings__license", "settings__contributors", "preferences" -> 3
             else -> 0
         }

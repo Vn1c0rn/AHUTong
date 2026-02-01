@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -66,6 +67,7 @@ import com.ahu.ahutong.sdk.RustSDK
 import com.ahu.ahutong.R
 import com.ahu.ahutong.appwidget.ScheduleAppWidgetReceiver
 import com.ahu.ahutong.ui.shape.SmoothRoundedCornerShape
+import com.ahu.ahutong.ui.screen.canteen.CanteenRoutes
 import com.kyant.capsule.ContinuousCapsule
 import com.kyant.monet.a1
 import com.kyant.monet.n1
@@ -75,6 +77,8 @@ import kotlin.system.measureTimeMillis
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Restaurant
 
 @Composable
 fun Tools(navController: NavHostController) {
@@ -302,6 +306,12 @@ fun Tools(navController: NavHostController) {
                 onClick = { navController.navigate("exam") }
             )
             ToolItem(
+                label = stringResource(id = R.string.canteen),
+                icon = Icons.Outlined.Restaurant,
+                tint = Color(0xFF795548),
+                onClick = { navController.navigate(CanteenRoutes.Campus) }
+            )
+            ToolItem(
                 stringId = R.string.school_calendar,
                 iconId = R.drawable.ic_schedule,
                 tint = Color(0xFF9C27B0),
@@ -379,6 +389,38 @@ private fun ToolItem(
         )
         Text(
             text = stringResource(id = stringId),
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.labelLarge
+        )
+    }
+}
+
+@Composable
+private fun ToolItem(
+    label: String,
+    icon: ImageVector,
+    tint: Color,
+    onClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .clip(SmoothRoundedCornerShape(16.dp))
+            .clickable(
+                role = Role.Button,
+                onClick = onClick
+            )
+            .padding(16.dp, 8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            imageVector = icon,
+            modifier = Modifier.size(40.dp),
+            contentDescription = null,
+            tint = tint
+        )
+        Text(
+            text = label,
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.labelLarge
         )
